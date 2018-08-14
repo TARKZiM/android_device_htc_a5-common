@@ -21,6 +21,6 @@
 
 #define BTM_DEF_LOCAL_NAME   "HTC Desire 816"
 #define MAX_L2CAP_CHANNELS    16
-
+#define BLE_VND_INCLUDED FALSE
 #pragma pop_macro("PROPERTY_VALUE_MAX")
 #endif
