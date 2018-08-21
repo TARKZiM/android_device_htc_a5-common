@@ -1,4 +1,6 @@
-# Copyright (C) 2014 The CyanogenMod Project
+#
+# Copyright (C) 2015-2016 The CyanogenMod Project
+#               2017-2018 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -59,10 +61,16 @@ TARGET_KERNEL_CONFIG := lineage_a5_defconfig
 BOARD_USES_QCOM_HARDWARE := true
 
 # Audio
-BOARD_USES_ALSA_AUDIO := true
+AUDIO_FEATURE_ENABLED_EXTN_FORMATS := true
+AUDIO_FEATURE_ENABLED_EXTN_POST_PROC := true
+AUDIO_FEATURE_ENABLED_FLUENCE := true
+AUDIO_FEATURE_ENABLED_FM_POWER_OPT := true
+AUDIO_FEATURE_ENABLED_HFP := true
+AUDIO_FEATURE_ENABLED_PROXY_DEVICE := true
 AUDIO_FEATURE_LOW_LATENCY_PRIMARY := true
 AUDIO_FEATURE_ENABLED_HWDEP_CAL := true
 AUDIO_FEATURE_ENABLED_LOW_LATENCY_CAPTURE := true
+BOARD_USES_ALSA_AUDIO := true
 USE_CUSTOM_AUDIO_POLICY := 1
 USE_XML_AUDIO_POLICY_CONF := 1
 
@@ -94,7 +102,6 @@ TARGET_DISABLE_POSTRENDER_CLEANUP := true
 TARGET_FS_CONFIG_GEN := $(LOCAL_PATH)/config.fs
 
 # FM Radio
-AUDIO_FEATURE_ENABLED_FM_POWER_OPT := true
 TARGET_QCOM_NO_FM_FIRMWARE := true
 
 # Graphics
