@@ -193,5 +193,8 @@ TARGET_LD_SHIM_LIBS := \
 # SDClang
 TARGET_USE_SDCLANG := true
 
+# Tweaks for 'low ram' devices
+-include device/htc/a5-common/lowram/BoardConfig.mk
+
 # inherit from the proprietary version
 -include vendor/htc/a5-common/BoardConfigVendor.mk

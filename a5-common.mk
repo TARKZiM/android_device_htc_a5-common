@@ -21,6 +21,9 @@ $(call inherit-product-if-exists, vendor/htc/a5-common/a5-common-vendor.mk)
 # System properties
 -include $(LOCAL_PATH)/system_prop.mk
 
+# Tweaks for 'low ram' devices
+$(call inherit-product-if-exists, $(LOCAL_PATH)/lowram/device.mk)
+
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH)
