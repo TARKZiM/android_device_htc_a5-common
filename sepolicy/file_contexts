@@ -36,4 +36,13 @@
 /sys/devices/platform/htc_battery/power_supply/battery(/.*)? u:object_r:sysfs_battery_supply:s0
 /sys/devices/platform/htc_battery/power_supply/usb(/.*)? u:object_r:sysfs_usb_supply:s0
 
-/sys/devices/virtual/timed_output/vibrator/pwm_value_1p u:object_r:vibe_dev:s0
+/sys/devices/virtual/timed_output/vibrator/pwm_value_1p u:object_r:sysfs_vibrator:s0
+
+/carrier(/.*)?          u:object_r:rootfs:s0
+/custdata(/.*)?          u:object_r:rootfs:s0
+/tombstones              u:object_r:rootfs:s0
+
+# HALs
+/system/vendor/bin/hw/android\.hardware\.gatekeeper@1\.0-service\.software           u:object_r:hal_gatekeeper_default_exec:s0
+/system/vendor/bin/hw/android\.hardware\.light@2\.0-service\.htc_msm8926             u:object_r:hal_light_default_exec:s0
+/system/vendor/bin/hw/android\.hardware\.vibrator@1\.0-service\.a5                   u:object_r:hal_vibrator_default_exec:s0

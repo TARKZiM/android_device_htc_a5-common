@@ -21,7 +21,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <camera/CameraParameters.h>
-#include <camera/CameraParametersExtra.h>
 #include <system/graphics.h>
 
 namespace android {
@@ -107,7 +106,6 @@ const char CameraParameters::WHITE_BALANCE_DAYLIGHT[] = "daylight";
 const char CameraParameters::WHITE_BALANCE_CLOUDY_DAYLIGHT[] = "cloudy-daylight";
 const char CameraParameters::WHITE_BALANCE_TWILIGHT[] = "twilight";
 const char CameraParameters::WHITE_BALANCE_SHADE[] = "shade";
-const char CameraParameters::WHITE_BALANCE_MANUAL_CCT[] = "manual-cct";
 
 // Values for effect settings.
 const char CameraParameters::EFFECT_NONE[] = "none";
@@ -170,22 +168,48 @@ const char CameraParameters::FOCUS_MODE_FIXED[] = "fixed";
 const char CameraParameters::FOCUS_MODE_EDOF[] = "edof";
 const char CameraParameters::FOCUS_MODE_CONTINUOUS_VIDEO[] = "continuous-video";
 const char CameraParameters::FOCUS_MODE_CONTINUOUS_PICTURE[] = "continuous-picture";
-const char CameraParameters::FOCUS_MODE_MANUAL_POSITION[] = "manual";
 
 // Values for light fx settings
 const char CameraParameters::LIGHTFX_LOWLIGHT[] = "low-light";
 const char CameraParameters::LIGHTFX_HDR[] = "high-dynamic-range";
 
-// HTC settings
-const char CameraParameters::SCENE_MODE_TEXT[] = "text";
-const char CameraParameters::KEY_SMILEINFO_BYFACE_SUPPORTED[] = "smileinfo-byface-supported";
+// HTC values
 const char CameraParameters::KEY_CONTI_BURST_STATE[] = "contiburst-state";
+const char CameraParameters::SCENE_MODE_TEXT[] = "text";
 const char CameraParameters::CONTI_BURST_CAPTURING[] = "contiburst-capturing";
 const char CameraParameters::CONTI_BURST_CAPTURE_DONE[] = "contiburst-done";
+const char CameraParameters::KEY_GPU_EFFECT[] = "GPU-effect";
+const char CameraParameters::KEY_GPU_EFFECT_PARAM_0[] = "GE-param0";
+const char CameraParameters::KEY_GPU_EFFECT_PARAM_1[] = "GE-param1";
+const char CameraParameters::KEY_GPU_EFFECT_PARAM_2[] = "GE-param2";
+const char CameraParameters::KEY_GPU_EFFECT_PARAM_3[] = "GE-param3";
 const char CameraParameters::KEY_FORCE_USE_AUDIO_ENABLED[] = "forceuseaudio";
+const char CameraParameters::KEY_ZSL[] = "zsl";
+const char CameraParameters::KEY_CAMERA_MODE[] = "camera-mode";
+const char CameraParameters::KEY_SMILEINFO_BYFACE_SUPPORTED[] = "smileinfo-byface-supported";
+const char CameraParameters::ZSL_OFF[] = "off";
+
+static String8 get_forced_value(String8 key, String8 value)
+{
+    if (key == "face-detection-values") return String8("off");
+    if (key == "face-detection") return String8("off");
+    return value;
+}
+
+static void add(DefaultKeyedVector<String8,String8> &map, String8 key, String8 value)
+{
+    value = get_forced_value(key, value);
+    map.add(key, value);
+}
+
+static void replaceValueFor(DefaultKeyedVector<String8,String8> &map, String8 key, String8 value)
+{
+    value = get_forced_value(key, value);
+    map.replaceValueFor(key, value);
+}
 
 CameraParameters::CameraParameters()
-    : CameraParameters_EXT(this), mMap()
+                : CameraParameters_EXT(this), mMap()
 {
 }
 
@@ -235,12 +259,12 @@ void CameraParameters::unflatten(const String8 &params)
         if (b == 0) {
             // If there's no semicolon, this is the last item.
             String8 v(a);
-            mMap.add(k, v);
+            add(mMap, k, v);
             break;
         }
 
         String8 v(a, (size_t)(b-a));
-        mMap.add(k, v);
+        add(mMap, k, v);
         a = b+1;
     }
 }
@@ -248,9 +272,6 @@ void CameraParameters::unflatten(const String8 &params)
 
 void CameraParameters::set(const char *key, const char *value)
 {
-    if (key == NULL || value == NULL)
-        return;
-
     // XXX i think i can do this with strspn()
     if (strchr(key, '=') || strchr(key, ';')) {
         //XXX ALOGE("Key \"%s\"contains invalid character (= or ;)", key);
@@ -261,16 +282,8 @@ void CameraParameters::set(const char *key, const char *value)
         //XXX ALOGE("Value \"%s\"contains invalid character (= or ;)", value);
         return;
     }
-#ifdef QCOM_HARDWARE
-    // qcom cameras default to delivering an extra zero-exposure frame on HDR.
-    // The android SDK only wants one frame, so disable this unless the app
-    // explicitly asks for it
-    if (!get("hdr-need-1x")) {
-        mMap.replaceValueFor(String8("hdr-need-1x"), String8("false"));
-    }
-#endif
 
-    mMap.replaceValueFor(String8(key), String8(value));
+    replaceValueFor(mMap, String8(key), String8(value));
 }
 
 void CameraParameters::set(const char *key, int value)
@@ -388,67 +401,6 @@ void CameraParameters::getPreferredPreviewSizeForVideo(int *width, int *height) 
     const char *p = get(KEY_PREFERRED_PREVIEW_SIZE_FOR_VIDEO);
     if (p == 0)  return;
     parse_pair(p, width, height, 'x');
-}
-
-const char * CameraParameters::getPreviewFrameRateMode() const
-{
-    return get("preview-frame-rate-mode");
-}
-
-void CameraParameters::setPreviewFrameRateMode(const char *mode)
-{
-    set("preview-frame-rate-mode", mode);
-}
-
-int CameraParameters::getBrightnessLumaTargetSet(int *brightness, int *luma) const
-{
-    const char *p;
-    *brightness = *luma = -1;
-    p = get("brightness-luma-target-set");
-    if (p == 0) return -1;
-    parse_pair(p, brightness, luma, ',');
-    return 0;
-}
-
-void CameraParameters::setTouchIndexAec(int x, int y)
-{
-    char buf[32];
-    snprintf(buf, 32, "%dx%d", x, y);
-    set("touch-index-aec", buf);
-}
-
-void CameraParameters::getTouchIndexAec(int *x, int *y)
-{
-    const char *p;
-    *x = *y = -1;
-    p = get("touch-index-aec");
-    if (p == 0) return;
-    parse_pair(p, x, y, 'x');
-}
-
-void CameraParameters::setTouchIndexAf(int x, int y)
-{
-    char buf[32];
-    snprintf(buf, 32, "%dx%d", x, y);
-    set("touch-index-af", buf);
-}
-
-void CameraParameters::getTouchIndexAf(int *x, int *y)
-{
-    const char *p;
-    *x = *y = -1;
-    p = get("touch-index-af");
-    if (p == 0) return;
-    parse_pair(p, x, y, 'x');
-}
-
-void CameraParameters::getRawSize(int *x, int *y) const
-{
-    const char *p;
-    *x = *y = -1;
-    p = get("raw-size");
-    if (p == 0) return;
-    parse_pair(p, x, y, 'x');
 }
 
 void CameraParameters::getSupportedPreviewSizes(Vector<Size> &sizes) const
@@ -616,5 +568,16 @@ int CameraParameters::previewFormatToEnum(const char* format) {
 bool CameraParameters::isEmpty() const {
     return mMap.isEmpty();
 }
+
+
+void CameraParameters::getBrightnessLumaTargetSet(int *magic __unused, int *sauce __unused) const{};
+void CameraParameters::setBrightnessLumaTargetSet(int brightness, int luma) {
+    char str[32];
+    snprintf(str, sizeof(str),"%d,%d", brightness, luma);
+    set("brightness-luma-target-set", str);
+};
+void CameraParameters::getRawSize(int *magic __unused, int *sauce __unused) const{};
+void CameraParameters::setZsl(const char *sauce) { set("zsl",sauce);};
+const char *CameraParameters::getZsl() const { return get("zsl");};
 
 }; // namespace android

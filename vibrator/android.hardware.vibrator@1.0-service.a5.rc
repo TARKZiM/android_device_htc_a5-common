@@ -1,0 +1,9 @@
+on init
+    # Set vibrator intensity permissions
+    chown system system /sys/devices/virtual/timed_output/vibrator/pwm_value_1p
+    chmod 0644 /sys/devices/virtual/timed_output/vibrator/pwm_value_1p
+
+service vibrator-1-0 /vendor/bin/hw/android.hardware.vibrator@1.0-service.a5
+    class hal
+    user system
+    group system

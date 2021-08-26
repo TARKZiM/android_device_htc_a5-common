@@ -37,29 +37,22 @@ TARGET_ARCH := arm
 TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
-TARGET_CPU_MEMCPY_BASE_OPT_DISABLE := true
-TARGET_CPU_VARIANT := krait
+TARGET_CPU_VARIANT := generic
+TARGET_CPU_VARIANT_RUNTIME := krait
+
+# Binder API version
+TARGET_USES_64_BIT_BINDER := true
 
 # Kernel
 BOARD_DTBTOOL_ARGS := --dt-tag "htc,project-id = <"
 BOARD_KERNEL_CMDLINE := console=none androidboot.hardware=qcom user_debug=31 ehci-hcd.park=3 zcache androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x00000000
+BOARD_KERNEL_IMAGE_NAME := zImage
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_SEPARATED_DT := true
 BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x02008000 --tags_offset 0x01e00000
-TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-eabi-
-KERNEL_TOOLCHAIN := $(ANDROID_BUILD_TOP)/prebuilts/gcc/linux-x86/arm/arm-eabi-5.3/bin
-TARGET_TOOLCHAIN_ROOT := $(ANDROID_BUILD_TOP)/prebuilts/gcc/linux-x86/arm/arm-eabi-5.3/bin
 TARGET_KERNEL_SOURCE := kernel/htc/msm8974
 TARGET_KERNEL_CONFIG := lineage_a5_defconfig
-
-# Enable dex-preoptimization to speed up first boot sequence
-ifeq ($(HOST_OS),linux)
-ifneq (eng,$(TARGET_BUILD_VARIANT))
-WITH_DEXPREOPT := true
-DONT_DEXPREOPT_PREBUILTS := true
-endif
-endif
 
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := true
@@ -78,17 +71,25 @@ BLUETOOTH_HCI_USE_MCT := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(LOCAL_PATH)/bluetooth
 
 # Camera
-TARGET_SPECIFIC_CAMERA_PARAMETER_LIBRARY := libcamera_parameters_ext
-#BOARD_GLOBAL_CFLAGS += -DPROPERTY_PERMS_APPEND='{"htc.camera.sensor.", AID_CAMERA, 0}, {"camera.4k2k.", AID_MEDIA, 0},'
 TARGET_USE_COMPAT_GRALLOC_ALIGN := true
 USE_DEVICE_SPECIFIC_CAMERA := true
 TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
 TARGET_NEEDS_METADATA_CAMERA_SOURCE := true
 TARGET_USES_MEDIA_EXTENSIONS := true
 TARGET_HAS_LEGACY_CAMERA_HAL1 := true
+TARGET_PROCESS_SDK_VERSION_OVERRIDE += \
+    /system/bin/mediaserver=22 \
+    /system/vendor/bin/mm-qcamera-daemon=23
 
 # Charge mode
 BOARD_CHARGING_MODE_BOOTING_LPM := /sys/htc_lpm/lpm_mode
+
+# Display
+TARGET_SCREEN_DENSITY := 320
+TARGET_DISABLE_POSTRENDER_CLEANUP := true
+
+# Filesystem
+TARGET_FS_CONFIG_GEN := $(LOCAL_PATH)/config.fs
 
 # FM Radio
 AUDIO_FEATURE_ENABLED_FM_POWER_OPT := true
@@ -97,10 +98,19 @@ TARGET_QCOM_NO_FM_FIRMWARE := true
 # Graphics
 TARGET_USES_ION := true
 USE_OPENGL_RENDERER := true
-OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
 MAX_EGL_CACHE_KEY_SIZE := 12*1024
 MAX_EGL_CACHE_SIZE := 2048*1024
+TARGET_ADDITIONAL_GRALLOC_10_USAGE_BITS := 0x02000000U
+TARGET_DISABLE_POSTRENDER_CLEANUP := true
 TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
+
+# HIDL
+DEVICE_MANIFEST_FILE := $(LOCAL_PATH)/manifest.xml
+DEVICE_MATRIX_FILE := $(LOCAL_PATH)/compatibility_matrix.xml
+PRODUCT_ENFORCE_VINTF_MANIFEST_OVERRIDE := true
+
+# Legacy memfd
+TARGET_HAS_MEMFD_BACKPORT := true
 
 # Includes
 TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
@@ -109,7 +119,7 @@ TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
 TARGET_PROVIDES_LIBLIGHT := true
 
 # Power
-TARGET_POWERHAL_VARIANT := qcom
+TARGET_USES_INTERACTION_BOOST := true
 
 # RPC
 TARGET_NO_RPC := true
@@ -130,6 +140,7 @@ TARGET_USES_QCOM_WCNSS_QMI := true
 TARGET_USES_WCNSS_CTRL := true
 WIFI_DRIVER_FW_PATH_STA := "sta"
 WIFI_DRIVER_FW_PATH_AP := "ap"
+WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 
 # Partitions
 BOARD_BOOTIMAGE_PARTITION_SIZE := 16777216
@@ -138,16 +149,21 @@ BOARD_RECOVERY_BLDRMSG_OFFSET := 2048
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 16777216
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2415919104
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 4429185024
+BOARD_ROOT_EXTRA_FOLDERS := \
+    carrier \
+    custdata \
+    firmware/adsp \
+    firmware/radio \
+    firmware/wcnss
+BOARD_ROOT_EXTRA_SYMLINKS := \
+    /data/tombstones:/tombstones
 BOARD_FLASH_BLOCK_SIZE := 131072
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
 # Recovery
-BOARD_HAS_LARGE_FILESYSTEM := true
-BOARD_HAS_NO_MISC_PARTITION := true
-BOARD_HAS_NO_SELECT_BUTTON := true
-BOARD_USES_MMCUTILS := true
-TARGET_RECOVERY_DEVICE_DIRS += device/htc/a5-common
+BOOTLOADER_MESSAGE_OFFSET := 2048
+TARGET_RECOVERY_DEVICE_DIRS += $(LOCAL_PATH)
 TARGET_RECOVERY_DEVICE_MODULES += chargeled
 TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/rootdir/etc/fstab.qcom
 
@@ -156,32 +172,20 @@ BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
 
-# Sensors
-BOARD_GLOBAL_CFLAGS += -DCOMPAT_SENSORS_M
-TARGET_NO_SENSOR_PERMISSION_CHECK := true
-
-# Graphics
-TARGET_BOOTANIMATION_MULTITHREAD_DECODE := true
-
 # RIL
 TARGET_RIL_VARIANT := caf
 TARGET_NEEDS_GCC_LIBC := true
 
-# SecComp
-#BOARD_SECCOMP_POLICY := device/htc/a5-common/seccomp
-
 # SELinux
-include device/qcom/sepolicy/sepolicy.mk
+include device/qcom/sepolicy-legacy/sepolicy.mk
 BOARD_SEPOLICY_DIRS += device/htc/a5-common/sepolicy
 
-# Hardware
-BOARD_USES_CYANOGEN_HARDWARE := true
-BOARD_HARDWARE_CLASS += \
-    device/htc/a5-common/cmhw \
-    hardware/cyanogen/cmhw
-
-#TWRP
-TW_THEME := portrait_hdpi
+# Shims
+TARGET_LD_SHIM_LIBS := \
+    /system/lib/liblog.so|libshim_log.so \
+    /system/vendor/lib/hw/camera.vendor.msm8226.so|libshim_camera.so \
+    /system/vendor/lib/libril-qc-qmi-1.so|libshim_ril.so \
+    /system/vendor/lib/libril-qc-qmi-1.so|libaudioclient_shim.so
 
 # SDClang
 TARGET_USE_SDCLANG := true

@@ -41,33 +41,55 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Audio
 PRODUCT_PROPERTY_OVERRIDES += \
-    av.offload.enable=false \
-    persist.audio.fluence.voicecall=true \
-    persist.audio.fluence.speaker=true \
-    ro.qc.sdk.audio.fluencetype=fluence \
-    tunnel.audio.encode=true \
-    use.voice.path.for.pcm.voip=false
+    af.fast_track_multiplier=1 \
+    audio.offload.disable=true \
+    debug.stagefright.omx_default_rank.sw-audio=1 \
+    debug.stagefright.omx_default_rank=0 \
+    persist.vendor.audio.fluence.voicecall=true \
+    persist.vendor.audio.fluence.speaker=false \
+    ro.vendor.audio.sdk.fluencetype=fluence \
+    vendor.audio_hal.period_size=192 \
+    vendor.audio.tunnel.encode=true \
+    vendor.voice.path.for.pcm.voip=false
 
 # AV
 PRODUCT_PROPERTY_OVERRIDES += \
     media.aac_51_output_enabled=true \
     mm.enable.smoothstreaming=true
 
+# Camera
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.camera.maxopen=3
+
+# Dalvik heap
+PRODUCT_PROPERTY_OVERRIDES += \
+    dalvik.vm.heapstartsize=16m \
+    dalvik.vm.heapgrowthlimit=192m \
+    dalvik.vm.heapsize=512m \
+    dalvik.vm.heaptargetutilization=0.75 \
+    dalvik.vm.heapminfree=2m \
+    dalvik.vm.heapmaxfree=8m
+
 # GPS
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.gps.qc_nlp_in_use=0 \
-    ro.gps.agps_provider=1
+    ro.gps.agps_provider=1 \
+    ro.qc.sdk.izat.premium_enabled=0 \
+    ro.qc.sdk.izat.service_mask=0x0
 
 # Graphics
 PRODUCT_PROPERTY_OVERRIDES += \
     debug.composition.type=dyn \
     debug.egl.hw=1 \
+    debug.hwui.use_buffer_age=false \
     debug.mdpcomp.logs=0 \
+    debug.sf.disable_backpressure=1 \
     debug.sf.hw=1 \
     dev.pm.dyn_samplingrate=1 \
     persist.hwc.mdpcomp.enable=true \
     ro.sf.lcd_density=320 \
-    ro.opengles.version=196608
+    ro.opengles.version=196608 \
+    ro.surface_flinger.max_frame_buffer_acquired_buffers=3
 
 # Input
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -85,16 +107,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0
 
-#sdcardfs
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.sys.sdcardfs=true
-
-#loglevel
-#debugging, highest loglevel
-PRODUCT_PROPERTY_OVERRIDES += \
-    sys.init_log_level=7 \
-    persist.logd.logpersistd=logcatd
-
 # Art
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dex2oat-flags=--no-watch-dog
@@ -106,4 +118,5 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
+    ro.bt.bdaddr_path=/sys/module/htc_bdaddress/parameters/bdaddress \
     qcom.bluetooth.soc=smd

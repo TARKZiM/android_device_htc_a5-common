@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2013, The CyanogenMod Project
+ * Copyright (C) 2013-2015 The CyanogenMod Project
+ *               2017 The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +15,14 @@
  * limitations under the License.
  */
 
-#ifndef _TFA9887_H_
-#define _TFA9887_H_
+#pragma once
 
+#include <pthread.h>
+#include <stdbool.h>
 #include <stdint.h>
 
 #define TFA9887_DEVICE "/dev/tfa9887"
 #define TFA9887L_DEVICE "/dev/tfa9887l"
-
-#define TPA9887_IOCTL_MAGIC 'a'
-#define TPA9887_WRITE_CONFIG	_IOW(TPA9887_IOCTL_MAGIC, 0x01, unsigned int)
-#define TPA9887_READ_CONFIG	_IOW(TPA9887_IOCTL_MAGIC, 0x02, unsigned int)
-#define TPA9887_ENABLE_DSP	_IOW(TPA9887_IOCTL_MAGIC, 0x03, unsigned int)
-#define TPA9887_WRITE_L_CONFIG	_IOW(TPA9887_IOCTL_MAGIC, 0x04, unsigned int)
-#define TPA9887_READ_L_CONFIG	_IOW(TPA9887_IOCTL_MAGIC, 0x05, unsigned int)
-#define TPA9887_KERNEL_LOCK	_IOW(TPA9887_IOCTL_MAGIC, 0x06, unsigned int)
 
 #define TFA9887_DEFAULT_RATE 48000
 
@@ -112,7 +106,7 @@ struct tfa9887_amp_t {
     int fd;
     bool is_right;
     bool is_on;
-    uint32_t mode;
+    int mode;
     bool initializing;
     bool writing;
     pthread_t write_thread;
@@ -230,7 +224,5 @@ struct tfa9887_amp_t {
 
 int tfa9887_open(void);
 int tfa9887_power(bool on);
-int tfa9887_set_mode(audio_mode_t mode);
+int tfa9887_set_mode(int mode);
 int tfa9887_close(void);
-
-#endif

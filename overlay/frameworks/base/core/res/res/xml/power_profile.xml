@@ -43,7 +43,8 @@
         <value>2.88</value>
         <value>2.88</value>
     </array>
-    <array name="cpu.speeds">
+    <item name="cpu.clusters.cores">4</item>
+    <array name="cpu.core_speeds.cluster0">
         <value>300000</value>
         <value>600000</value>
         <value>787200</value>
@@ -56,8 +57,8 @@
         <value>1497600</value>
         <value>1593600</value>
     </array>
-    <item name="cpu.idle">2.52</item>
-    <array name="cpu.active">
+    <item name="cpu.suspend">2.52</item>
+    <array name="cpu.core_power.cluster0">
         <value>18</value>
         <value>45</value>
         <value>54.36</value>
