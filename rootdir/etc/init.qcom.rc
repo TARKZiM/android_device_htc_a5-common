@@ -318,7 +318,7 @@ service akmd /system/bin/akmd
     user system
     group system misc input
 
-service fm_dl /system/bin/setprop hw.fm.init 1
+service vendor.fm /system/bin/setprop vendor.hw.fm.init 1
     class late_start
     user root
     group system
