@@ -194,6 +194,15 @@
 /sys/devices/f9925000.i2c/i2c-0/0-* enable          0660     input     system
 /sys/devices/f9925000.i2c/i2c-0/0-* poll_delay      0660     input     system
 
+/dev/cm3602               0640   compass    system
+/dev/lightsensor          0640   system     system
+/sys/devices/virtual/optical_sensors/proximity      ps_adc         0660    input    system
+/sys/devices/virtual/optical_sensors/proximity      ps_poll_delay  0660    input    system
+/sys/devices/virtual/optical_sensors/lightsensor    ls_auto        0660    input    system
+/sys/devices/virtual/optical_sensors/lightsensor    ls_poll_delay  0660    input    system
+/sys/devices/virtual/input/input*                   poll           0660    input    system
+/sys/devices/virtual/input/input*                   pollrate_ms    0660    input    system
+
 # wlan
 /dev/wcnss_wlan           0660   system     system
 /dev/wcnss_ctrl           0660   system     system

@@ -63,6 +63,7 @@ AUDIO_FEATURE_LOW_LATENCY_PRIMARY := true
 AUDIO_FEATURE_ENABLED_HWDEP_CAL := true
 AUDIO_FEATURE_ENABLED_LOW_LATENCY_CAPTURE := true
 USE_CUSTOM_AUDIO_POLICY := 1
+USE_XML_AUDIO_POLICY_CONF := 1
 
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
@@ -152,6 +153,8 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 4429185024
 BOARD_ROOT_EXTRA_FOLDERS := \
     carrier \
     custdata \
+    devlog \
+    fataldevlog \
     firmware/adsp \
     firmware/radio \
     firmware/wcnss
@@ -184,8 +187,7 @@ BOARD_SEPOLICY_DIRS += device/htc/a5-common/sepolicy
 TARGET_LD_SHIM_LIBS := \
     /system/lib/liblog.so|libshim_log.so \
     /system/vendor/lib/hw/camera.vendor.msm8226.so|libshim_camera.so \
-    /system/vendor/lib/libril-qc-qmi-1.so|libshim_ril.so \
-    /system/vendor/lib/libril-qc-qmi-1.so|libaudioclient_shim.so
+    /system/vendor/lib/libril-qc-qmi-1.so|libshim_ril.so
 
 # SDClang
 TARGET_USE_SDCLANG := true

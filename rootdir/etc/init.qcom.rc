@@ -45,9 +45,6 @@ on init
     # Set permissions for persist partition
     mkdir /persist 0771 system system
 
-    # Support legacy paths
-    symlink /sdcard /storage/sdcard0
-
     # for AKM8963
     chown system system /dev/akm8963_dev
     chown system system /sys/class/compass/akm8963/enable_acc
@@ -135,15 +132,12 @@ on post-fs-data
     # Radio permissions
     mkdir /dev/radio 0770 radio radio
 
-    mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
-
     # Create the directories used by the Wireless subsystem
-    mkdir /data/misc/wifi 0771 wifi wifi
-    mkdir /data/misc/wifi/hostapd 0770 wifi wifi
-    mkdir /data/misc/wifi/sockets 0770 wifi wifi
-    mkdir /data/misc/wifi/wpa_supplicant 0770 wifi wifi
-    mkdir /data/misc/dhcp 0770 dhcp dhcp
-    chown dhcp dhcp /data/misc/dhcp
+    mkdir /data/vendor/wifi 0770 wifi wifi
+    mkdir /data/vendor/wifi/wpa 0770 wifi wifi
+    mkdir /data/vendor/wifi/wpa/sockets 0770 wifi wifi
+
+    mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
 
     # Create the directory used by CnE subsystem
     mkdir /data/connectivity 0771 system system
@@ -303,6 +297,12 @@ on boot
 # load ADSP
     write /sys/kernel/boot_adsp/boot 1
 
+    # Bluetooth MAC address
+    chown bluetooth bluetooth /sys/module/htc_bdaddress/parameters/bdaddress
+
+    # Wifi firmware reload path
+    chown wifi wifi /sys/module/wlan/parameters/fwpath
+
 ## Service start here
 service adsprpcd /system/bin/adsprpcd
     class main
@@ -314,12 +314,7 @@ service akmd /system/bin/akmd
     user system
     group system misc input
 
-service audiod /system/bin/audiod
-    class late_start
-    user system
-    group system
-
-service config_bluetooth /system/bin/sh /system/etc/init.qcom.bt.sh "onboot"
+service config_bluetooth /system/etc/init.qcom.bt.sh "onboot"
     class late_start
     user root
     oneshot
@@ -331,31 +326,12 @@ service fm_dl /system/bin/setprop hw.fm.init 1
     disabled
     oneshot
 
-service ftp /system/bin/sdptool add --handle=0x1ff20 --psm=5257 --channel=20 FTP
-    user bluetooth
-    group bluetooth net_bt_admin
-    disabled
-    oneshot
-
-service ftp_del /system/bin/sdptool del 0x1ff20
-    user bluetooth
-    group bluetooth net_bt_admin
-    disabled
-    oneshot
-
-service hciattach /system/bin/sh /system/etc/init.qcom.bt.bluedroid.sh
+service hciattach /system/etc/init.qcom.bt.bluedroid.sh
     class late_start
     user bluetooth
     group bluetooth net_bt_admin
     disabled
     oneshot
-
-service hostapd /system/bin/hostapd -dddd /data/hostapd/hostapd.conf
-    class late_start
-    user root
-    group root
-    oneshot
-    disabled
 
 service irsc_util /system/bin/irsc_util "/etc/sec_config"
     class main
@@ -409,7 +385,7 @@ service qcamerasvr /system/bin/mm-qcamera-daemon
 service qmuxd /system/bin/qmuxd
     class core
     user radio
-    group radio audio bluetooth gps
+    group radio audio bluetooth gps oem_2950
 
 service qseecomd /system/bin/qseecomd
    class main
@@ -437,7 +413,7 @@ service time_daemon /system/bin/time_daemon
 service wcnss-service /system/bin/wcnss_service
     class main
     user system
-    group system wifi radio
+    group system wifi oem_2950 radio
     oneshot
 
 # Properties start here
@@ -471,9 +447,6 @@ on property:ro.use_data_netmgrd=false
 
 on property:service.adb.root=1
     write /sys/class/android_usb/android0/restart_adbd 1
-
-on property:sys.boot_completed=1
-    start qrngp
 
 on property:apexd.status=ready
     mount none /system/etc/swcodec/ld.config.txt /apex/com.android.media.swcodec/etc/ld.config.txt bind

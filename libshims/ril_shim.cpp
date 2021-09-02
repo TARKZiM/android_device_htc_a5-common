@@ -19,3 +19,11 @@ extern "C" int
 vsnprintf() {
   return 0;
 }
+
+extern "C" void *
+_ZN7android11AudioSystem16addErrorCallbackEPFviE(void *cb);
+
+extern "C" void
+_ZN7android11AudioSystem16setErrorCallbackEPFviE(void *cb) {
+  _ZN7android11AudioSystem16addErrorCallbackEPFviE(cb);
+}

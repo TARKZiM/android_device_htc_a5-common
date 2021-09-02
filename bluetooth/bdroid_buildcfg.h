@@ -29,5 +29,8 @@
 #define BLE_PERIPHERAL_ADV_NAME  FALSE
 #define BT_CLEAN_TURN_ON_DISABLED TRUE
 
+/* Defined if the kernel does not have support for CLOCK_BOOTTIME_ALARM */
+#define KERNEL_MISSING_CLOCK_BOOTTIME_ALARM TRUE
+
 #pragma pop_macro("PROPERTY_VALUE_MAX")
 #endif

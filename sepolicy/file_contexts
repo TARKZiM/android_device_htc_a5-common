@@ -40,6 +40,8 @@
 
 /carrier(/.*)?          u:object_r:rootfs:s0
 /custdata(/.*)?          u:object_r:rootfs:s0
+/devlog(/.*)?            u:object_r:rootfs:s0
+/fataldevlog(/.*)?            u:object_r:rootfs:s0
 /tombstones              u:object_r:rootfs:s0
 
 # HALs
