@@ -20,12 +20,7 @@
 #pragma push_macro("PROPERTY_VALUE_MAX")
 
 #define BTM_DEF_LOCAL_NAME   "HTC Desire 816"
-// Disables read remote device feature
-#define BTA_SKIP_BLE_READ_REMOTE_FEAT FALSE
 #define MAX_L2CAP_CHANNELS    16
-// skips conn update at conn completion
-#define BTA_BLE_SKIP_CONN_UPD  FALSE
-#define BLE_PERIPHERAL_ADV_NAME  FALSE
 
 #pragma pop_macro("PROPERTY_VALUE_MAX")
 #endif
