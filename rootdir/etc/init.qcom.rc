@@ -314,11 +314,6 @@ service akmd /system/bin/akmd
     user system
     group system misc input
 
-service config_bluetooth /system/etc/init.qcom.bt.sh "onboot"
-    class late_start
-    user root
-    oneshot
-
 service fm_dl /system/bin/setprop hw.fm.init 1
     class late_start
     user root
@@ -326,7 +321,7 @@ service fm_dl /system/bin/setprop hw.fm.init 1
     disabled
     oneshot
 
-service hciattach /system/etc/init.qcom.bt.bluedroid.sh
+service hciattach /vendor/bin/init.qcom.bt.bluedroid.sh
     class late_start
     user bluetooth
     group bluetooth net_bt_admin

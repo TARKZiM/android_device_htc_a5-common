@@ -1,16 +1,14 @@
-
+  
 service ril-daemon2 /system/vendor/bin/hw/rild -c 2
     class main
-    socket rild2 stream 660 root radio
-    socket sap_uim_socket2 stream 660 bluetooth bluetooth
-    socket rild-debug2 stream 660 radio system
-    user root
-    group radio cache inet misc audio sdcard_r sdcard_rw diag log bluetooth
+    user radio
     disabled
+    group radio cache inet misc audio log readproc wakelock oem_2901 system oem_5011
+    capabilities BLOCK_SUSPEND NET_ADMIN NET_RAW
 
-service rild2-wrapper /system/bin/sh /system/vendor/bin/init.qcom.ril.sh
-    class late_start
-    user root
-    group root
-    oneshot
+on property:persist.radio.multisim.config=dsds
+    enable ril-daemon2
+
+on property:persist.radio.multisim.config=dsda
+    enable ril-daemon2
 
