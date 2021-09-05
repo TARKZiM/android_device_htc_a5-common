@@ -99,6 +99,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     sys.io.scheduler=bfq
 
+# Memory optimizations
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vendor.qti.am.reschedule_service=true \
+    ro.vendor.qti.sys.fw.bservice_enable=true
+
 # Time services
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.timed.enable=true
@@ -118,8 +123,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
+    ro.bluetooth.dun=true \
+    ro.bluetooth.hfp.ver=1.6 \
+    ro.bluetooth.sap=true \
     ro.bt.bdaddr_path=/sys/module/htc_bdaddress/parameters/bdaddress \
-    qcom.bluetooth.soc=smd
+    ro.qualcomm.bt.hci_transport=smd
 
 # Vendor security patch level
 PRODUCT_PROPERTY_OVERRIDES += \
