@@ -1,1 +1,6 @@
 allow vold root_block_device:blk_file rw_file_perms;
+
+r_dir_file(vold, firmware_file)
+
+# For setting read_ahead_kb
+allow vold sysfs_mmc_host:file w_file_perms;

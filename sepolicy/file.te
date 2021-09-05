@@ -1,2 +1,15 @@
 type vibe_dev, file_type;
 type tmp_root_mount_file, file_type;
+
+# debugfs
+type debugfs_ion, fs_type, debugfs_type;
+
+# procfs
+type proc_last_kmsg, fs_type, proc_type;
+type proc_wcnss_service, fs_type;
+
+# sysfs
+type sysfs_camera_awb_cal, fs_type, sysfs_type;
+type sysfs_camera_led_status, fs_type, sysfs_type;
+type sysfs_camera_sensor, fs_type, sysfs_type;
+type sysfs_flashlight, fs_type, sysfs_type;

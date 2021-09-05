@@ -1,4 +1,4 @@
-#allow mediaserver debugfs:file r_file_perms;
+allow mediaserver debugfs:file { r_file_perms getattr open read };
 allow mediaserver system_server:unix_stream_socket { read write };
 allow mediaserver time_helper_device:chr_file rw_file_perms;
 allow mediaserver firmware_file:dir search;
@@ -6,3 +6,23 @@ allow mediaserver firmware_file:file r_file_perms;
 allow mediaserver socket_device:sock_file write;
 allow mediaserver thermal-engine:unix_stream_socket connectto;
 #allow mediaserver system_file:file execmod;
+
+allow mediaserver init:unix_dgram_socket sendto;
+allow mediaserver system_data_file:lnk_file read;
+allow mediaserver system_data_root_file:sock_file write;
+
+allow mediaserver sysfs_camera_sensor:file r_file_perms;
+allow mediaserver vendor_file:file execmod;
+r_dir_file(mediaserver, sysfs_battery_supply)
+r_dir_file(mediaserver, sysfs_camera_awb_cal)
+r_dir_file(mediaserver, sysfs_camera_led_status)
+set_prop(mediaserver, camera_prop)
+unix_socket_send(mediaserver, camera, mm-qcamerad)
+
+binder_call(mediaserver, hal_configstore)
+allow mediaserver hal_configstore_ISurfaceFlingerConfigs:hwservice_manager find;
+
+# debugfs access
+userdebug_or_eng(`
+    allow mediaserver debugfs_ion:file r_file_perms;
+')
