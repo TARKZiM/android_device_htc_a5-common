@@ -222,6 +222,10 @@ on boot
     chown bluetooth bluetooth /sys/module/hci_smd/parameters/hcismd_set
     chmod 0660 /sys/module/hci_smd/parameters/hcismd_set
 
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
+    chmod 0660 /sys/class/rfkill/rfkill0/state
+
     # Create QMUX deamon socket area
     mkdir /dev/socket/qmux_radio 0770 radio radio
     mkdir /dev/socket/qmux_audio 0770 media audio
@@ -326,35 +330,12 @@ service hciattach /vendor/bin/init.qcom.bt.bluedroid.sh
     user bluetooth
     group bluetooth net_bt_admin
     disabled
+    seclabel u:r:bluetooth_loader:s0
     oneshot
 
 service irsc_util /system/bin/irsc_util "/etc/sec_config"
     class main
     user root
-    oneshot
-
-service map0 /system/bin/sdptool add --handle=0x1ff16 --channel=16 MAS0
-    user bluetooth
-    group bluetooth net_bt_admin
-    disabled
-    oneshot
-
-service map0_del /system/bin/sdptool del 0x1ff16
-    user bluetooth
-    group bluetooth net_bt_admin
-    disabled
-    oneshot
-
-service map1 /system/bin/sdptool add --handle=0x1ff17 --channel=17 MAS1
-    user bluetooth
-    group bluetooth net_bt_admin
-    disabled
-    oneshot
-
-service map1_del /system/bin/sdptool del 0x1ff17
-    user bluetooth
-    group bluetooth net_bt_admin
-    disabled
     oneshot
 
 service mpdecision /system/bin/mpdecision --avg_comp
@@ -417,12 +398,6 @@ on property:vendor.bluetooth.hciattach=true
 
 on property:vendor.bluetooth.hciattach=false
     setprop vendor.bluetooth.status off
-
-on property:bluetooth.sap.status=running
-    start bt-sap
-
-on property:bluetooth.sap.status=stopped
-    stop bt-sap
 
 on property:init.svc.bootanim=stopped
     # Overwrite ActivityManager's low memory killer settings
