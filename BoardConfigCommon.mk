@@ -81,7 +81,7 @@ TARGET_USES_MEDIA_EXTENSIONS := true
 TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 TARGET_PROCESS_SDK_VERSION_OVERRIDE += \
     /system/bin/mediaserver=22 \
-    /system/vendor/bin/mm-qcamera-daemon=23
+    /system/bin/mm-qcamera-daemon=23
 
 # Charge mode
 BOARD_CHARGING_MODE_BOOTING_LPM := /sys/htc_lpm/lpm_mode
