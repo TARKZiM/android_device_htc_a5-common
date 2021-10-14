@@ -58,6 +58,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     media.aac_51_output_enabled=true \
     mm.enable.smoothstreaming=true
 
+# BPF
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.kernel.ebpf.supported=false
+
 # Camera
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.camera.maxopen=3
