@@ -110,6 +110,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.qti.am.reschedule_service=true \
     ro.vendor.qti.sys.fw.bservice_enable=true
 
+# System
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.sys.binary_xml=false
+
 # Time services
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.timed.enable=true
