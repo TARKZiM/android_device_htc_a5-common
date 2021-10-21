@@ -18,7 +18,9 @@ cc_library_static {
     name: "libinit_htc_msm8926",
     recovery_available: true,
     srcs: ["init_msm8926.cpp"],
+    whole_static_libs: ["libbase"],
     include_dirs: [
-        "system/core/base/include",
-    ],
+        "system/libbase/include",
+        "system/core/init"
+    ]
 }
