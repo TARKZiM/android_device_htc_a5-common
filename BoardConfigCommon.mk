@@ -57,6 +57,8 @@ BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x02008000 -
 TARGET_KERNEL_SOURCE := kernel/htc/msm8974
 TARGET_KERNEL_CONFIG := lineage_a5_defconfig
 
+BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
+
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := true
 
@@ -188,8 +190,10 @@ TARGET_RIL_VARIANT := caf
 TARGET_NEEDS_GCC_LIBC := true
 
 # SELinux
-include device/qcom/sepolicy-legacy/sepolicy.mk
-BOARD_SEPOLICY_DIRS += device/htc/a5-common/sepolicy
+# include device/qcom/sepolicy-legacy/sepolicy.mk
+#BOARD_SEPOLICY_DIRS += device/htc/a5-common/sepolicy
+BOARD_SEPOLICY_DIRS += device/htc/a5-common/sepolicy-minimal
+SELINUX_IGNORE_NEVERALLOWS := true
 
 # Shims
 TARGET_LD_SHIM_LIBS := \

@@ -1,0 +1,6 @@
+/firmware(/.*)?            u:object_r:tmp_root_mount_file:s0
+/carrier(/.*)?                 u:object_r:tmp_root_mount_file:s0
+/custdata(/.*)?             u:object_r:tmp_root_mount_file:s0
+/devlog(/.*)?                 u:object_r:tmp_root_mount_file:s0
+/fataldevlog(/.*)?           u:object_r:tmp_root_mount_file:s0
+/tombstones(/.*)?           u:object_r:tmp_root_mount_file:s0
