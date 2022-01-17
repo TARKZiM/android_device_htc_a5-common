@@ -134,6 +134,7 @@ PRODUCT_PACKAGES += \
     camera.device@1.0-impl \
     camera.msm8226 \
     libshim_camera \
+    libshim_sensor \
     Snap
 
 # Configstore

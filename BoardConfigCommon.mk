@@ -199,6 +199,7 @@ SELINUX_IGNORE_NEVERALLOWS := true
 TARGET_LD_SHIM_LIBS := \
     /system/lib/liblog.so|libshim_log.so \
     /system/vendor/lib/hw/camera.vendor.msm8226.so|libshim_camera.so \
+    /system/vendor/lib/hw/camera.vendor.msm8226.so|libshim_sensor.so \
     /system/vendor/lib/libril-qc-qmi-1.so|libshim_ril.so
 
 # SDClang
