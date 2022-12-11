@@ -134,7 +134,7 @@ PRODUCT_PACKAGES += \
     camera.msm8226 \
     libshim_camera \
     libshim_sensor \
-    Snap
+    Aperture
 
 # Configstore
 PRODUCT_PACKAGES += \
