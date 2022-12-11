@@ -42,3 +42,13 @@ LOCAL_SRC_FILES := ril_shim.cpp
 LOCAL_SHARED_LIBRARIES := libaudioclient
 LOCAL_MODULE := libshim_ril
 include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES := libaudioclient_shim.cpp
+LOCAL_MODULE := libaudioclient_shim
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
+LOCAL_SHARED_LIBRARIES := libaudioclient
+LOCAL_VENDOR_MODULE := true
+
+include $(BUILD_SHARED_LIBRARY)
