@@ -91,6 +91,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     debug.sf.disable_backpressure=1 \
     debug.sf.hw=1 \
     debug.sf.predict_hwc_composition_strategy=0 \
+    debug.sf.enable_transaction_tracing=false \
     debug.renderengine.backend=threaded \
     dev.pm.dyn_samplingrate=1 \
     persist.hwc.mdpcomp.enable=true \
