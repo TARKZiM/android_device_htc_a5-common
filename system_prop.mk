@@ -136,6 +136,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
+    bluetooth.core.le.vendor_capabilities.enabled=false \
     ro.bluetooth.dun=true \
     ro.bluetooth.hfp.ver=1.6 \
     ro.bluetooth.sap=true \
