@@ -97,6 +97,7 @@ PRODUCT_PACKAGES += \
     audio.primary.msm8226 \
     audio.r_submix.default \
     audio.usb.default \
+    libaudioroute \
     libaudio-resampler \
     libqcompostprocbundle \
     libqcomvisualizer \
@@ -237,6 +238,7 @@ PRODUCT_COPY_FILES += \
 # OMX
 PRODUCT_PACKAGES += \
     libc2dcolorconvert \
+    libminijail:32 \
     libOmxAacEnc \
     libOmxAmrEnc \
     libOmxCore \
