@@ -84,6 +84,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Graphics
 PRODUCT_PROPERTY_OVERRIDES += \
+    ro.hardware.egl=adreno \
     debug.composition.type=dyn \
     debug.egl.hw=1 \
     debug.hwui.use_buffer_age=false \
