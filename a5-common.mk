@@ -250,10 +250,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.power-service-qti
 
-# Prebuilt Protobuf
-PRODUCT_COPY_FILES += \
-    prebuilts/vndk/v28/arm64/arch-arm-armv8-a/shared/vndk-core/libprotobuf-cpp-lite.so:$(TARGET_COPY_OUT_VENDOR)/lib/libprotobuf-cpp-lite-v28.so
-
 # Protobuf
 PRODUCT_PACKAGES += \
     libprotobuf-cpp-full-vendorcompat \
