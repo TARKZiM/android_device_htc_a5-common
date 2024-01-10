@@ -9,6 +9,4 @@ cc_library_shared {
 
     name: "libshim_sensor",
 
-    proprietary: true,
-
 }
